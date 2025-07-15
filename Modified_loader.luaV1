@@ -84,12 +84,25 @@ rerollBtn.AutoButtonColor = false
 rerollBtn.Active = false
 Instance.new("UICorner", rerollBtn)
 
--- Pet List UI
-local petListFrame = Instance.new("Frame", gui)
-petListFrame.Size = UDim2.new(0, 180, 0, 300)
-petListFrame.Position = UDim2.new(0.6, 0, 0.3, 0)
+-- Footer Label
+local footer = Instance.new("TextLabel", mainUI)
+footer.Size = UDim2.new(1, 0, 0.2, 0)
+footer.Position = UDim2.new(0, 0, 0.65, 0)
+footer.BackgroundTransparency = 1
+footer.Text = "Modified script by No-lag Hub\n<font color=\"rgb(255,0,0)\"><b>Pet Age Randomizer</b></font>"
+footer.RichText = true
+footer.TextColor3 = Color3.new(1,1,1)
+footer.Font = Enum.Font.Gotham
+footer.TextScaled = true
+
+-- Pet List UI with Scrolling
+local petListFrame = Instance.new("ScrollingFrame", gui)
+petListFrame.Size = UDim2.new(0, 180, 0, 200)
+petListFrame.Position = UDim2.new(0.65, 0, 0.4, 0)
 petListFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 petListFrame.Visible = false
+petListFrame.ScrollBarThickness = 6
+petListFrame.CanvasSize = UDim2.new(0, 0, 0, 300)
 Instance.new("UICorner", petListFrame)
 
 local pets = {
@@ -106,7 +119,7 @@ local pets = {
 local selectedPet = nil
 
 for i, pet in ipairs(pets) do
-    local btn = Instance.new("TextButton", petListFrame)
+    local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(1, 0, 0, 30)
     btn.Position = UDim2.new(0, 0, 0, (i - 1) * 35)
     btn.Text = pet.Name
@@ -115,6 +128,7 @@ for i, pet in ipairs(pets) do
     btn.Font = Enum.Font.Gotham
     btn.TextScaled = true
     Instance.new("UICorner", btn)
+    btn.Parent = petListFrame
 
     btn.MouseButton1Click:Connect(function()
         selectedPet = pet.Name
@@ -135,6 +149,9 @@ confirm.Size = UDim2.new(0.45, 0, 0.5, 0)
 confirm.Position = UDim2.new(0.05, 0, 0.25, 0)
 confirm.Text = "Confirm"
 confirm.BackgroundColor3 = lightGreen
+confirm.TextColor3 = Color3.new(1, 1, 1)
+confirm.Font = Enum.Font.GothamBold
+confirm.TextScaled = true
 Instance.new("UICorner", confirm)
 
 local cancel = Instance.new("TextButton", confirmBox)
@@ -142,6 +159,9 @@ cancel.Size = UDim2.new(0.45, 0, 0.5, 0)
 cancel.Position = UDim2.new(0.5, 0, 0.25, 0)
 cancel.Text = "Cancel"
 cancel.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+cancel.TextColor3 = Color3.new(1, 1, 1)
+cancel.Font = Enum.Font.GothamBold
+cancel.TextScaled = true
 Instance.new("UICorner", cancel)
 
 cancel.MouseButton1Click:Connect(function()
@@ -206,7 +226,8 @@ rerollBtn.MouseButton1Click:Connect(function()
         task.wait(1)
     end
 
-    statusLabel.Text = "Pet Age changed into <i>65age 10.3kg</i>\nPlease Rejoin"
+    statusLabel.Text = "Pet Age changed into <i>65age 10.3kg</i>
+Please Rejoin"
     statusLabel.RichText = true
 end)
 
