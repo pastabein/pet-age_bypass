@@ -1,4 +1,4 @@
--- Roblox Egg Refresher: Grow a Garden Style
+-- Roblox Pet Age Randomizer: Grow a Garden Style
 
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -18,7 +18,7 @@ local titleGreen = Color3.fromRGB(34, 139, 34)
 
 -- ScreenGui
 local gui = Instance.new("ScreenGui", playerGui)
-gui.Name = "EggRefresherGUI"
+gui.Name = "PetAgeRandomizerGUI"
 gui.ResetOnSpawn = false
 
 -- Start Frame
