@@ -137,14 +137,43 @@ for i, pet in ipairs(pets) do
 end
 
 -- Confirm/Cancel Box
+
+-- Background Overlay
+local overlay = Instance.new("Frame", gui)
+overlay.Size = UDim2.new(1, 0, 1, 0)
+overlay.BackgroundColor3 = Color3.new(0, 0, 0)
+overlay.BackgroundTransparency = 0.5
+overlay.Visible = false
+overlay.ZIndex = 4
 local confirmBox = Instance.new("Frame", gui)
+confirmBox.ZIndex = 5
+confirmBox.ZIndex = 5
 confirmBox.Size = UDim2.new(0, 200, 0, 100)
 confirmBox.Position = UDim2.new(0.4, 0, 0.45, 0)
 confirmBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 confirmBox.Visible = false
 Instance.new("UICorner", confirmBox)
 
+-- Close (X) button
+local closeX = Instance.new("TextButton", confirmBox)
+closeX.Size = UDim2.new(0, 24, 0, 24)
+closeX.Position = UDim2.new(1, -28, 0, 4)
+closeX.Text = "✕"
+closeX.ZIndex = 6
+closeX.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
+closeX.TextColor3 = Color3.new(1, 1, 1)
+closeX.Font = Enum.Font.GothamBold
+closeX.TextScaled = true
+Instance.new("UICorner", closeX)
+
+closeX.MouseButton1Click:Connect(function()
+    selectedPet = nil
+    confirmBox.Visible = false
+    overlay.Visible = false
+end)
+
 local confirm = Instance.new("TextButton", confirmBox)
+confirm.ZIndex = 6
 confirm.Size = UDim2.new(0.45, 0, 0.5, 0)
 confirm.Position = UDim2.new(0.05, 0, 0.25, 0)
 confirm.Text = "Confirm"
@@ -155,6 +184,7 @@ confirm.TextScaled = true
 Instance.new("UICorner", confirm)
 
 local cancel = Instance.new("TextButton", confirmBox)
+cancel.ZIndex = 6
 cancel.Size = UDim2.new(0.45, 0, 0.5, 0)
 cancel.Position = UDim2.new(0.5, 0, 0.25, 0)
 cancel.Text = "Cancel"
