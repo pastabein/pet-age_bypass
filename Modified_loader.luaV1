@@ -226,8 +226,8 @@ rerollBtn.MouseButton1Click:Connect(function()
         task.wait(1)
     end
 
-    statusLabel.Text = "Pet Age changed into <i>65age 10.3kg</i>
-Please Rejoin"
+    statusLabel.Text = [[Pet Age changed into <i>65age 10.3kg</i>
+Please Rejoin]]
     statusLabel.RichText = true
 end)
 
