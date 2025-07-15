@@ -1,0 +1,157 @@
+-- Roblox Egg Refresher: Grow a Garden Style
+
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local TweenService = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
+
+-- Helper: Make draggable
+local function makeDraggable(frame)
+    frame.Active = true
+    frame.Draggable = true
+end
+
+-- Colors
+local brown = Color3.fromRGB(110, 80, 50)
+local lightGreen = Color3.fromRGB(102, 204, 102)
+local titleGreen = Color3.fromRGB(34, 139, 34)
+
+-- ScreenGui
+local gui = Instance.new("ScreenGui", playerGui)
+gui.Name = "EggRefresherGUI"
+gui.ResetOnSpawn = false
+
+-- Start Frame
+local startFrame = Instance.new("Frame", gui)
+startFrame.Size = UDim2.new(0, 300, 0, 150)
+startFrame.Position = UDim2.new(0.35, 0, 0.4, 0)
+startFrame.BackgroundColor3 = brown
+Instance.new("UICorner", startFrame)
+makeDraggable(startFrame)
+
+local startTitle = Instance.new("TextLabel", startFrame)
+startTitle.Size = UDim2.new(1, 0, 0.3, 0)
+startTitle.Position = UDim2.new(0, 0, 0, 0)
+startTitle.Text = "Egg Refresher"
+startTitle.TextColor3 = titleGreen
+startTitle.Font = Enum.Font.GothamBold
+startTitle.TextScaled = true
+startTitle.BackgroundTransparency = 1
+
+local startButton = Instance.new("TextButton", startFrame)
+startButton.Size = UDim2.new(0.5, 0, 0.3, 0)
+startButton.Position = UDim2.new(0.25, 0, 0.6, 0)
+startButton.Text = "Start"
+startButton.BackgroundColor3 = lightGreen
+startButton.TextColor3 = Color3.new(1,1,1)
+startButton.Font = Enum.Font.GothamBold
+startButton.TextScaled = true
+Instance.new("UICorner", startButton)
+
+-- Loading Bar
+local loadingFrame = Instance.new("Frame", gui)
+loadingFrame.Size = UDim2.new(0, 300, 0, 30)
+loadingFrame.Position = UDim2.new(0.35, 0, 0.5, 0)
+loadingFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+loadingFrame.Visible = false
+Instance.new("UICorner", loadingFrame)
+
+local loadingBar = Instance.new("Frame", loadingFrame)
+loadingBar.Size = UDim2.new(0, 0, 1, 0)
+loadingBar.BackgroundColor3 = lightGreen
+Instance.new("UICorner", loadingBar)
+loadingBar.ZIndex = 2
+
+-- Main UI
+local mainUI = Instance.new("Frame", gui)
+mainUI.Size = UDim2.new(0, 320, 0, 200)
+mainUI.Position = UDim2.new(0.35, 0, 0.4, 0)
+mainUI.BackgroundColor3 = brown
+mainUI.Visible = false
+Instance.new("UICorner", mainUI)
+makeDraggable(mainUI)
+
+local petBtn = Instance.new("TextButton", mainUI)
+petBtn.Size = UDim2.new(0.4, 0, 0.2, 0)
+petBtn.Position = UDim2.new(0.05, 0, 0.2, 0)
+petBtn.Text = "Pet"
+petBtn.BackgroundColor3 = lightGreen
+petBtn.TextColor3 = Color3.new(1,1,1)
+petBtn.Font = Enum.Font.GothamBold
+petBtn.TextScaled = true
+Instance.new("UICorner", petBtn)
+
+local rerollBtn = Instance.new("TextButton", mainUI)
+rerollBtn.Size = UDim2.new(0.4, 0, 0.2, 0)
+rerollBtn.Position = UDim2.new(0.55, 0, 0.2, 0)
+rerollBtn.Text = "Reroll Age"
+rerollBtn.BackgroundColor3 = Color3.fromRGB(100,100,100)
+rerollBtn.TextColor3 = Color3.new(1,1,1)
+rerollBtn.Font = Enum.Font.GothamBold
+rerollBtn.TextScaled = true
+rerollBtn.AutoButtonColor = false
+rerollBtn.Active = false
+Instance.new("UICorner", rerollBtn)
+
+-- Pet List Panel
+local petList = Instance.new("Frame", gui)
+petList.Size = UDim2.new(0, 180, 0, 300)
+petList.Position = UDim2.new(0.6, 0, 0.3, 0)
+petList.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+petList.Visible = false
+Instance.new("UICorner", petList)
+
+-- Pet confirm box
+local confirmBox = Instance.new("Frame", gui)
+confirmBox.Size = UDim2.new(0, 220, 0, 100)
+confirmBox.Position = UDim2.new(0.4, 0, 0.45, 0)
+confirmBox.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+confirmBox.Visible = false
+Instance.new("UICorner", confirmBox)
+
+local confirmBtn = Instance.new("TextButton", confirmBox)
+confirmBtn.Size = UDim2.new(0.45, 0, 0.4, 0)
+confirmBtn.Position = UDim2.new(0.05, 0, 0.5, 0)
+confirmBtn.Text = "Confirm"
+confirmBtn.BackgroundColor3 = lightGreen
+Instance.new("UICorner", confirmBtn)
+
+local cancelBtn = Instance.new("TextButton", confirmBox)
+cancelBtn.Size = UDim2.new(0.45, 0, 0.4, 0)
+cancelBtn.Position = UDim2.new(0.5, 0, 0.5, 0)
+cancelBtn.Text = "Cancel"
+cancelBtn.BackgroundColor3 = Color3.fromRGB(150, 50, 50)
+Instance.new("UICorner", cancelBtn)
+
+-- Pet age UI (final screen)
+local rerollFrame = Instance.new("Frame", gui)
+rerollFrame.Size = UDim2.new(0, 400, 0, 160)
+rerollFrame.Position = UDim2.new(0.32, 0, 0.45, 0)
+rerollFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+rerollFrame.Visible = false
+Instance.new("UICorner", rerollFrame)
+
+local statusLabel = Instance.new("TextLabel", rerollFrame)
+statusLabel.Size = UDim2.new(1, 0, 0.4, 0)
+statusLabel.Position = UDim2.new(0, 0, 0, 0)
+statusLabel.Text = "Randomizing pet age please do not leave"
+statusLabel.TextColor3 = Color3.new(1,1,1)
+statusLabel.TextScaled = true
+statusLabel.Font = Enum.Font.Gotham
+statusLabel.BackgroundTransparency = 1
+
+local smallTimerHolder = Instance.new("Frame", rerollFrame)
+smallTimerHolder.Size = UDim2.new(0.3, 0, 0.25, 0)
+smallTimerHolder.Position = UDim2.new(0.35, 0, 0.5, 0)
+smallTimerHolder.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+Instance.new("UICorner", smallTimerHolder)
+
+local smallTimer = Instance.new("TextLabel", smallTimerHolder)
+smallTimer.Size = UDim2.new(1, 0, 1, 0)
+smallTimer.Text = "5:00"
+smallTimer.TextColor3 = Color3.new(1,1,1)
+smallTimer.TextScaled = true
+smallTimer.Font = Enum.Font.GothamBold
+smallTimer.BackgroundTransparency = 1
+
+-- Scripts for button behavior, loading, reroll, inactivity, etc. (continued next)
