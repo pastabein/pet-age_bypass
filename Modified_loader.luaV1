@@ -1,216 +1,142 @@
--- Roblox Pet Age Randomizer: Reimagined with Garden UI Elements
-
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
-local TweenService = game:GetService("TweenService")
-local UIS = game:GetService("UserInputService")
 
--- Helper Function
-local function makeDraggable(frame)
-    frame.Active = true
-    frame.Draggable = true
+-- Main GUI
+local screenGui = Instance.new("ScreenGui", playerGui)
+screenGui.Name = "PetLevelerUI"
+screenGui.ResetOnSpawn = false
+
+-- UI corner styling
+local function roundify(obj)
+	local corner = Instance.new("UICorner", obj)
+	corner.CornerRadius = UDim.new(0, 10)
 end
 
--- Colors
-local baseBrown = Color3.fromRGB(100, 85, 60)
-local accentGreen = Color3.fromRGB(80, 200, 120)
-local textWhite = Color3.new(1, 1, 1)
+-- Start Button
+local startButton = Instance.new("TextButton", screenGui)
+startButton.Size = UDim2.new(0, 200, 0, 50)
+startButton.Position = UDim2.new(0.5, -100, 0.4, 0)
+startButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+startButton.Text = "▶️ Start"
+startButton.TextSize = 22
+startButton.Font = Enum.Font.GothamBold
+startButton.TextColor3 = Color3.new(1, 1, 1)
+roundify(startButton)
 
--- GUI Container
-local gui = Instance.new("ScreenGui", playerGui)
-gui.Name = "PetAgeGardenUI"
-gui.ResetOnSpawn = false
+-- Countdown Label (for 15s wait)
+local countdownLabel = Instance.new("TextLabel", screenGui)
+countdownLabel.Size = UDim2.new(0, 250, 0, 50)
+countdownLabel.Position = UDim2.new(0.5, -125, 0.47, 0)
+countdownLabel.BackgroundTransparency = 1
+countdownLabel.Text = ""
+countdownLabel.Font = Enum.Font.Gotham
+countdownLabel.TextSize = 20
+countdownLabel.TextColor3 = Color3.new(1, 1, 1)
 
--- Background Image
-local background = Instance.new("ImageLabel", gui)
-background.Size = UDim2.new(1, 0, 1, 0)
-background.Position = UDim2.new(0, 0, 0, 0)
-background.Image = "rbxassetid://13886771787" -- Wooden background
-background.ImageTransparency = 0.1
-background.BackgroundTransparency = 1
-background.ZIndex = 0
+-- Main Panel Frame
+local mainFrame = Instance.new("Frame", screenGui)
+mainFrame.Size = UDim2.new(0, 260, 0, 170)
+mainFrame.Position = UDim2.new(0.5, -130, 0.3, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
+mainFrame.Visible = false
+roundify(mainFrame)
 
--- Title Banner
-local titleBar = Instance.new("TextLabel", gui)
-titleBar.Size = UDim2.new(0, 300, 0, 40)
-titleBar.Position = UDim2.new(0.5, -150, 0.05, 0)
-titleBar.BackgroundColor3 = baseBrown
-titleBar.Text = "<b>Pet Age Randomizer</b>"
-titleBar.RichText = true
-titleBar.TextColor3 = textWhite
-titleBar.Font = Enum.Font.FredokaOne
-titleBar.TextScaled = true
-Instance.new("UICorner", titleBar)
+-- Title
+local title = Instance.new("TextLabel", mainFrame)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "🐺 Level Up Your Pets"
+title.Font = Enum.Font.GothamBlack
+title.TextSize = 20
+title.TextColor3 = Color3.fromRGB(255, 70, 70)
 
--- Welcome Screen
-local welcomeFrame = Instance.new("Frame", gui)
-welcomeFrame.Size = UDim2.new(0, 240, 0, 120)
-welcomeFrame.Position = UDim2.new(0.5, -120, 0.5, -60)
-welcomeFrame.BackgroundColor3 = baseBrown
-Instance.new("UICorner", welcomeFrame)
-makeDraggable(welcomeFrame)
+-- Level Up Button
+local levelButton = Instance.new("TextButton", mainFrame)
+levelButton.Size = UDim2.new(0.8, 0, 0, 40)
+levelButton.Position = UDim2.new(0.1, 0, 0.45, 0)
+levelButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+levelButton.Text = "🔥 Level Up 50+ Instantly"
+levelButton.Font = Enum.Font.GothamBold
+levelButton.TextSize = 18
+levelButton.TextColor3 = Color3.new(1, 1, 1)
+roundify(levelButton)
 
-local welcomeBtn = Instance.new("TextButton", welcomeFrame)
-welcomeBtn.Size = UDim2.new(0.6, 0, 0.4, 0)
-welcomeBtn.Position = UDim2.new(0.2, 0, 0.3, 0)
-welcomeBtn.Text = "Enter"
-welcomeBtn.BackgroundColor3 = accentGreen
-welcomeBtn.TextColor3 = textWhite
-welcomeBtn.Font = Enum.Font.FredokaOne
-welcomeBtn.TextScaled = true
-Instance.new("UICorner", welcomeBtn)
+-- Footer
+local footer = Instance.new("TextLabel", mainFrame)
+footer.Size = UDim2.new(1, 0, 0, 30)
+footer.Position = UDim2.new(0, 0, 1, -30)
+footer.BackgroundTransparency = 1
+footer.Text = "Modified Script: LimitHub"
+footer.Font = Enum.Font.GothamSemibold
+footer.TextSize = 14
+footer.TextColor3 = Color3.fromRGB(180, 180, 180)
 
--- Loading Progress Bar
-local loadingHolder = Instance.new("Frame", gui)
-loadingHolder.Size = UDim2.new(0, 280, 0, 25)
-loadingHolder.Position = UDim2.new(0.5, -140, 0.5, -12)
-loadingHolder.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-loadingHolder.Visible = false
-Instance.new("UICorner", loadingHolder)
+-- Percentage Label over character
+local percentageLabel = Instance.new("BillboardGui", player.Character:WaitForChild("Head"))
+percentageLabel.Size = UDim2.new(0, 300, 0, 50)
+percentageLabel.StudsOffset = Vector3.new(0, 2.5, 0)
+percentageLabel.AlwaysOnTop = true
+percentageLabel.Enabled = false
 
-local loadProgress = Instance.new("Frame", loadingHolder)
-loadProgress.Size = UDim2.new(0, 0, 1, 0)
-loadProgress.BackgroundColor3 = accentGreen
-Instance.new("UICorner", loadProgress)
+local percentText = Instance.new("TextLabel", percentageLabel)
+percentText.Size = UDim2.new(1, 0, 1, 0)
+percentText.BackgroundTransparency = 1
+percentText.Text = ""
+percentText.TextColor3 = Color3.fromRGB(255, 0, 0)
+percentText.Font = Enum.Font.GothamBlack
+percentText.TextSize = 28
+percentText.TextStrokeTransparency = 0.4
 
--- Main UI
-local rootUI = Instance.new("Frame", gui)
-rootUI.Size = UDim2.new(0, 320, 0, 180)
-rootUI.Position = UDim2.new(0.5, -160, 0.5, -90)
-rootUI.BackgroundColor3 = baseBrown
-rootUI.Visible = false
-Instance.new("UICorner", rootUI)
-makeDraggable(rootUI)
+-- Success Message
+local successMsg = Instance.new("BillboardGui", player.Character.Head)
+successMsg.Size = UDim2.new(0, 350, 0, 60)
+successMsg.StudsOffset = Vector3.new(0, 2.5, 0)
+successMsg.AlwaysOnTop = true
+successMsg.Enabled = false
 
-local petSelect = Instance.new("TextButton", rootUI)
-petSelect.Size = UDim2.new(0.45, 0, 0.25, 0)
-petSelect.Position = UDim2.new(0.05, 0, 0.2, 0)
-petSelect.Text = "Choose Pet"
-petSelect.BackgroundColor3 = accentGreen
-petSelect.TextColor3 = textWhite
-petSelect.Font = Enum.Font.FredokaOne
-petSelect.TextScaled = true
-Instance.new("UICorner", petSelect)
+local successText = Instance.new("TextLabel", successMsg)
+successText.Size = UDim2.new(1, 0, 1, 0)
+successText.BackgroundTransparency = 1
+successText.Text = "✅ Your pet leveled up and its weight randomly shifted successfully!\nPLEASE HOLD THE PET"
+successText.TextColor3 = Color3.fromRGB(0, 255, 0)
+successText.Font = Enum.Font.GothamBold
+successText.TextSize = 20
+successText.TextStrokeTransparency = 0.3
+successText.TextWrapped = true
+successText.TextYAlignment = Enum.TextYAlignment.Top
 
-local ageBtn = Instance.new("TextButton", rootUI)
-ageBtn.Size = UDim2.new(0.45, 0, 0.25, 0)
-ageBtn.Position = UDim2.new(0.5, 0, 0.2, 0)
-ageBtn.Text = "Age Up"
-ageBtn.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
-ageBtn.TextColor3 = textWhite
-ageBtn.Font = Enum.Font.FredokaOne
-ageBtn.TextScaled = true
-ageBtn.AutoButtonColor = false
-ageBtn.Active = false
-Instance.new("UICorner", ageBtn)
-
--- Footer Label
-local footerText = Instance.new("TextLabel", rootUI)
-footerText.Size = UDim2.new(1, 0, 0.2, 0)
-footerText.Position = UDim2.new(0, 0, 0.65, 0)
-footerText.BackgroundTransparency = 1
-footerText.RichText = true
-footerText.Text = "<b><font color='rgb(255,0,0)'>Pet Age Randomizer</font></b>\nModified by No-lag Hub"
-footerText.TextColor3 = textWhite
-footerText.Font = Enum.Font.Gotham
-footerText.TextScaled = true
-
--- Pet List
-local petListFrame = Instance.new("ScrollingFrame", gui)
-petListFrame.Size = UDim2.new(0, 200, 0, 250)
-petListFrame.Position = UDim2.new(0.5, 170, 0.5, -90)
-petListFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-petListFrame.Visible = false
-petListFrame.CanvasSize = UDim2.new(0, 0, 0, 400)
-petListFrame.ScrollBarThickness = 6
-Instance.new("UICorner", petListFrame)
-
-local pets = {
-    {Name = "Raccoon", Color = Color3.fromRGB(101, 67, 33)},
-    {Name = "Dragon Fly", Color = Color3.fromRGB(0, 255, 255)},
-    {Name = "Disco Bee", Color = Color3.fromRGB(255, 0, 255)},
-    {Name = "Queen Bee", Color = Color3.fromRGB(255, 223, 0)},
-    {Name = "Fennec Fox", Color = Color3.fromRGB(255, 153, 51)},
-    {Name = "Mimic Octopus", Color = Color3.fromRGB(102, 0, 204)},
-    {Name = "Butterfly", Color = Color3.fromRGB(255, 102, 178)},
-    {Name = "T-rex", Color = Color3.fromRGB(102, 255, 102)}
-}
-
-local selectedPet = nil
-
-for i, pet in ipairs(pets) do
-    local btn = Instance.new("TextButton", petListFrame)
-    btn.Size = UDim2.new(0.9, 0, 0, 35)
-    btn.Position = UDim2.new(0.05, 0, 0, (i - 1) * 40)
-    btn.BackgroundColor3 = pet.Color
-    btn.Text = "🌿 " .. pet.Name
-    btn.TextColor3 = Color3.new(1, 1, 1)
-    btn.Font = Enum.Font.FredokaOne
-    btn.TextScaled = true
-    local stroke = Instance.new("UIStroke", btn)
-    stroke.Color = Color3.new(1, 1, 1)
-    stroke.Thickness = 1.2
-    stroke.Transparency = 0.3
-    Instance.new("UICorner", btn)
-
-    btn.MouseButton1Click:Connect(function()
-        selectedPet = pet.Name
-        petListFrame.Visible = false
-        ageBtn.Active = true
-        ageBtn.BackgroundColor3 = accentGreen
-    end)
-end
-
-petSelect.MouseButton1Click:Connect(function()
-    petListFrame.Visible = true
+-- Start Button Logic
+startButton.MouseButton1Click:Connect(function()
+	startButton.Visible = false
+	local countdown = 15
+	countdownLabel.Text = "⏳ Starting in 15 seconds..."
+	while countdown > 0 do
+		wait(1)
+		countdown -= 1
+		countdownLabel.Text = "⏳ Starting in " .. countdown .. " seconds..."
+	end
+	countdownLabel.Visible = false
+	mainFrame.Visible = true
 end)
 
-ageBtn.MouseButton1Click:Connect(function()
-    rootUI.Visible = false
+-- Level Up Button Logic
+levelButton.MouseButton1Click:Connect(function()
+	levelButton.Visible = false
+	percentageLabel.Enabled = true
 
-    local timerFrame = Instance.new("Frame", gui)
-    timerFrame.Size = UDim2.new(0, 300, 0, 100)
-    timerFrame.Position = UDim2.new(0.5, -150, 0.5, -50)
-    timerFrame.BackgroundColor3 = Color3.fromRGB(40,40,40)
-    Instance.new("UICorner", timerFrame)
+	local percent = 1
+	local duration = 240 -- 4 minutes
+	local interval = duration / 100
 
-    local countdown = Instance.new("TextLabel", timerFrame)
-    countdown.Size = UDim2.new(1, 0, 0.5, 0)
-    countdown.Position = UDim2.new(0, 0, 0, 0)
-    countdown.Text = "Randomizing pet age..."
-    countdown.TextColor3 = textWhite
-    countdown.Font = Enum.Font.FredokaOne
-    countdown.TextScaled = true
-    countdown.BackgroundTransparency = 1
+	for i = 1, 100 do
+		percentText.Text = "🔴 Pets Leveling Up Randomly! " .. i .. "%"
+		wait(interval)
+	end
 
-    local timerText = Instance.new("TextLabel", timerFrame)
-    timerText.Size = UDim2.new(1, 0, 0.5, 0)
-    timerText.Position = UDim2.new(0, 0, 0.5, 0)
-    timerText.Text = "5:00"
-    timerText.TextColor3 = textWhite
-    timerText.Font = Enum.Font.FredokaOne
-    timerText.TextScaled = true
-    timerText.BackgroundTransparency = 1
-
-    local total = 300
-    for t = total, 0, -1 do
-        local m = math.floor(t / 60)
-        local s = t % 60
-        timerText.Text = string.format("%d:%02d", m, s)
-        task.wait(1)
-    end
-
-    countdown.Text = "<i>65age 10.3kg</i>\nPlease Rejoin"
-    countdown.RichText = true
-    timerText.Visible = false
-end)
-
-welcomeBtn.MouseButton1Click:Connect(function()
-    welcomeFrame.Visible = false
-    loadingHolder.Visible = true
-    TweenService:Create(loadProgress, TweenInfo.new(4), {Size = UDim2.new(1, 0, 1, 0)}):Play()
-    task.delay(4, function()
-        loadingHolder.Visible = false
-        rootUI.Visible = true
-    end)
+	percentageLabel.Enabled = false
+	successMsg.Enabled = true
+	wait(6)
+	successMsg.Enabled = false
+	levelButton.Visible = true
 end)
