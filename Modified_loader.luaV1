@@ -1,4 +1,4 @@
--- Roblox Pet Age Randomizer: Grow a Garden Style
+-- Roblox Pet Age Randomizer: Grow a Garden Style (Updated with TikTok layout reference)
 
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -132,21 +132,22 @@ for i, pet in ipairs(pets) do
 
     btn.MouseButton1Click:Connect(function()
         selectedPet = pet.Name
+        overlay.Visible = true
         confirmBox.Visible = true
+        confirmBox.BackgroundTransparency = 1
+        TweenService:Create(confirmBox, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
     end)
 end
 
--- Confirm/Cancel Box
-
--- Background Overlay
+-- Confirm/Cancel Box and Overlay
 local overlay = Instance.new("Frame", gui)
 overlay.Size = UDim2.new(1, 0, 1, 0)
 overlay.BackgroundColor3 = Color3.new(0, 0, 0)
 overlay.BackgroundTransparency = 0.5
 overlay.Visible = false
 overlay.ZIndex = 4
+
 local confirmBox = Instance.new("Frame", gui)
-confirmBox.ZIndex = 5
 confirmBox.ZIndex = 5
 confirmBox.Size = UDim2.new(0, 200, 0, 100)
 confirmBox.Position = UDim2.new(0.4, 0, 0.45, 0)
@@ -154,7 +155,6 @@ confirmBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 confirmBox.Visible = false
 Instance.new("UICorner", confirmBox)
 
--- Close (X) button
 local closeX = Instance.new("TextButton", confirmBox)
 closeX.Size = UDim2.new(0, 24, 0, 24)
 closeX.Position = UDim2.new(1, -28, 0, 4)
@@ -197,10 +197,12 @@ Instance.new("UICorner", cancel)
 cancel.MouseButton1Click:Connect(function()
     selectedPet = nil
     confirmBox.Visible = false
+    overlay.Visible = false
 end)
 
 confirm.MouseButton1Click:Connect(function()
     confirmBox.Visible = false
+    overlay.Visible = false
     petListFrame.Visible = false
     rerollBtn.Active = true
     rerollBtn.BackgroundColor3 = lightGreen
