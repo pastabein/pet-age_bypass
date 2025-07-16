@@ -41,6 +41,10 @@ mainFrame.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
 mainFrame.Visible = false
 roundify(mainFrame)
 
+-- Make GUI Draggable
+mainFrame.Active = true
+mainFrame.Draggable = true
+
 -- Title
 local title = Instance.new("TextLabel", mainFrame)
 title.Size = UDim2.new(1, 0, 0, 40)
@@ -132,10 +136,14 @@ end)
 
 -- Level Up Button Logic
 levelButton.MouseButton1Click:Connect(function()
-	levelButton.Visible = false
+	if not levelButton.Active then return end
+
+	levelButton.Active = false
+	levelButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+	levelButton.Text = "⏳ Leveling Up..."
+
 	percentageLabel.Enabled = true
 
-	local percent = 1
 	local duration = 240 -- 4 minutes
 	local interval = duration / 100
 
@@ -148,5 +156,4 @@ levelButton.MouseButton1Click:Connect(function()
 	successMsg.Enabled = true
 	wait(6)
 	successMsg.Enabled = false
-	levelButton.Visible = true
 end)
