@@ -1,101 +1,100 @@
--- Roblox Pet Age Randomizer: Grow a Garden Style (Updated with TikTok layout reference)
+-- Roblox Pet Age Randomizer: Reimagined from Scratch
 
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local TweenService = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
 
--- Helper: Make draggable
+-- Helper Function
 local function makeDraggable(frame)
     frame.Active = true
     frame.Draggable = true
 end
 
--- Colors
-local brown = Color3.fromRGB(110, 80, 50)
-local lightGreen = Color3.fromRGB(102, 204, 102)
-local titleGreen = Color3.fromRGB(34, 139, 34)
+-- New Theme Colors
+local baseBrown = Color3.fromRGB(100, 85, 60)
+local accentGreen = Color3.fromRGB(80, 200, 120)
+local textWhite = Color3.new(1, 1, 1)
+local alertRed = Color3.fromRGB(255, 60, 60)
 
--- ScreenGui
+-- GUI Container
 local gui = Instance.new("ScreenGui", playerGui)
-gui.Name = "PetAgeRandomizerGUI"
+gui.Name = "PetAgeReimaginedUI"
 gui.ResetOnSpawn = false
 
--- Start Frame
-local startFrame = Instance.new("Frame", gui)
-startFrame.Size = UDim2.new(0, 200, 0, 100)
-startFrame.Position = UDim2.new(0.4, 0, 0.45, 0)
-startFrame.BackgroundColor3 = brown
-Instance.new("UICorner", startFrame)
-makeDraggable(startFrame)
+-- === Welcome Window ===
+local welcomeFrame = Instance.new("Frame", gui)
+welcomeFrame.Size = UDim2.new(0, 240, 0, 120)
+welcomeFrame.Position = UDim2.new(0.5, -120, 0.5, -60)
+welcomeFrame.BackgroundColor3 = baseBrown
+Instance.new("UICorner", welcomeFrame)
+makeDraggable(welcomeFrame)
 
-local startButton = Instance.new("TextButton", startFrame)
-startButton.Size = UDim2.new(0.6, 0, 0.5, 0)
-startButton.Position = UDim2.new(0.2, 0, 0.25, 0)
-startButton.Text = "Start"
-startButton.BackgroundColor3 = lightGreen
-startButton.TextColor3 = Color3.new(1,1,1)
-startButton.Font = Enum.Font.GothamBold
-startButton.TextScaled = true
-Instance.new("UICorner", startButton)
+local welcomeBtn = Instance.new("TextButton", welcomeFrame)
+welcomeBtn.Size = UDim2.new(0.6, 0, 0.4, 0)
+welcomeBtn.Position = UDim2.new(0.2, 0, 0.3, 0)
+welcomeBtn.Text = "Enter"
+welcomeBtn.BackgroundColor3 = accentGreen
+welcomeBtn.TextColor3 = textWhite
+welcomeBtn.Font = Enum.Font.FredokaOne
+welcomeBtn.TextScaled = true
+Instance.new("UICorner", welcomeBtn)
 
--- Loading Bar
-local loadingFrame = Instance.new("Frame", gui)
-loadingFrame.Size = UDim2.new(0, 300, 0, 30)
-loadingFrame.Position = UDim2.new(0.35, 0, 0.5, 0)
-loadingFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-loadingFrame.Visible = false
-Instance.new("UICorner", loadingFrame)
+-- === Entry Progress Bar ===
+local loadingHolder = Instance.new("Frame", gui)
+loadingHolder.Size = UDim2.new(0, 280, 0, 25)
+loadingHolder.Position = UDim2.new(0.5, -140, 0.5, -12)
+loadingHolder.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+loadingHolder.Visible = false
+Instance.new("UICorner", loadingHolder)
 
-local loadingBar = Instance.new("Frame", loadingFrame)
-loadingBar.Size = UDim2.new(0, 0, 1, 0)
-loadingBar.BackgroundColor3 = lightGreen
-Instance.new("UICorner", loadingBar)
-loadingBar.ZIndex = 2
+local loadProgress = Instance.new("Frame", loadingHolder)
+loadProgress.Size = UDim2.new(0, 0, 1, 0)
+loadProgress.BackgroundColor3 = accentGreen
+Instance.new("UICorner", loadProgress)
 
--- Main UI
-local mainUI = Instance.new("Frame", gui)
-mainUI.Size = UDim2.new(0, 320, 0, 200)
-mainUI.Position = UDim2.new(0.35, 0, 0.4, 0)
-mainUI.BackgroundColor3 = brown
-mainUI.Visible = false
-Instance.new("UICorner", mainUI)
-makeDraggable(mainUI)
+-- === Main Interface ===
+local rootUI = Instance.new("Frame", gui)
+rootUI.Size = UDim2.new(0, 320, 0, 180)
+rootUI.Position = UDim2.new(0.5, -160, 0.5, -90)
+rootUI.BackgroundColor3 = baseBrown
+rootUI.Visible = false
+Instance.new("UICorner", rootUI)
+makeDraggable(rootUI)
 
-local petBtn = Instance.new("TextButton", mainUI)
-petBtn.Size = UDim2.new(0.4, 0, 0.2, 0)
-petBtn.Position = UDim2.new(0.05, 0, 0.2, 0)
-petBtn.Text = "Pet"
-petBtn.BackgroundColor3 = lightGreen
-petBtn.TextColor3 = Color3.new(1,1,1)
-petBtn.Font = Enum.Font.GothamBold
-petBtn.TextScaled = true
-Instance.new("UICorner", petBtn)
+local petSelect = Instance.new("TextButton", rootUI)
+petSelect.Size = UDim2.new(0.45, 0, 0.25, 0)
+petSelect.Position = UDim2.new(0.05, 0, 0.2, 0)
+petSelect.Text = "Choose Pet"
+petSelect.BackgroundColor3 = accentGreen
+petSelect.TextColor3 = textWhite
+petSelect.Font = Enum.Font.FredokaOne
+petSelect.TextScaled = true
+Instance.new("UICorner", petSelect)
 
-local rerollBtn = Instance.new("TextButton", mainUI)
-rerollBtn.Size = UDim2.new(0.4, 0, 0.2, 0)
-rerollBtn.Position = UDim2.new(0.55, 0, 0.2, 0)
-rerollBtn.Text = "Reroll Age"
-rerollBtn.BackgroundColor3 = Color3.fromRGB(100,100,100)
-rerollBtn.TextColor3 = Color3.new(1,1,1)
-rerollBtn.Font = Enum.Font.GothamBold
-rerollBtn.TextScaled = true
-rerollBtn.AutoButtonColor = false
-rerollBtn.Active = false
-Instance.new("UICorner", rerollBtn)
+local ageBtn = Instance.new("TextButton", rootUI)
+ageBtn.Size = UDim2.new(0.45, 0, 0.25, 0)
+ageBtn.Position = UDim2.new(0.5, 0, 0.2, 0)
+ageBtn.Text = "Age Up"
+ageBtn.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
+ageBtn.TextColor3 = textWhite
+ageBtn.Font = Enum.Font.FredokaOne
+ageBtn.TextScaled = true
+ageBtn.AutoButtonColor = false
+ageBtn.Active = false
+Instance.new("UICorner", ageBtn)
 
--- Footer Label
-local footer = Instance.new("TextLabel", mainUI)
-footer.Size = UDim2.new(1, 0, 0.2, 0)
-footer.Position = UDim2.new(0, 0, 0.65, 0)
-footer.BackgroundTransparency = 1
-footer.Text = "Modified script by No-lag Hub\n<font color=\"rgb(255,0,0)\"><b>Pet Age Randomizer</b></font>"
-footer.RichText = true
-footer.TextColor3 = Color3.new(1,1,1)
-footer.Font = Enum.Font.Gotham
-footer.TextScaled = true
+local footerText = Instance.new("TextLabel", rootUI)
+footerText.Size = UDim2.new(1, 0, 0.2, 0)
+footerText.Position = UDim2.new(0, 0, 0.65, 0)
+footerText.BackgroundTransparency = 1
+footerText.RichText = true
+footerText.Text = "<b><font color='rgb(255,0,0)'>Pet Age Randomizer</font></b>\nModified by No-lag Hub"
+footerText.TextColor3 = textWhite
+footerText.Font = Enum.Font.Gotham
+footerText.TextScaled = true
 
--- Pet List UI with Scrolling
+-- === Pet List UI ===
 local petListFrame = Instance.new("ScrollingFrame", gui)
 petListFrame.Size = UDim2.new(0, 180, 0, 200)
 petListFrame.Position = UDim2.new(0.65, 0, 0.4, 0)
@@ -124,7 +123,7 @@ for i, pet in ipairs(pets) do
     btn.Position = UDim2.new(0, 0, 0, (i - 1) * 35)
     btn.Text = pet.Name
     btn.BackgroundColor3 = pet.Color
-    btn.TextColor3 = Color3.new(1,1,1)
+    btn.TextColor3 = Color3.new(1, 1, 1)
     btn.Font = Enum.Font.Gotham
     btn.TextScaled = true
     Instance.new("UICorner", btn)
@@ -132,150 +131,70 @@ for i, pet in ipairs(pets) do
 
     btn.MouseButton1Click:Connect(function()
         selectedPet = pet.Name
-        overlay.Visible = true
-        confirmBox.Visible = true
-        confirmBox.BackgroundTransparency = 1
-        TweenService:Create(confirmBox, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
+        ageBtn.Active = true
+        ageBtn.BackgroundColor3 = accentGreen
+        petListFrame.Visible = false
     end)
 end
 
--- Confirm/Cancel Box and Overlay
-local overlay = Instance.new("Frame", gui)
-overlay.Size = UDim2.new(1, 0, 1, 0)
-overlay.BackgroundColor3 = Color3.new(0, 0, 0)
-overlay.BackgroundTransparency = 0.5
-overlay.Visible = false
-overlay.ZIndex = 4
-
-local confirmBox = Instance.new("Frame", gui)
-confirmBox.ZIndex = 5
-confirmBox.Size = UDim2.new(0, 200, 0, 100)
-confirmBox.Position = UDim2.new(0.4, 0, 0.45, 0)
-confirmBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-confirmBox.Visible = false
-Instance.new("UICorner", confirmBox)
-
-local closeX = Instance.new("TextButton", confirmBox)
-closeX.Size = UDim2.new(0, 24, 0, 24)
-closeX.Position = UDim2.new(1, -28, 0, 4)
-closeX.Text = "✕"
-closeX.ZIndex = 6
-closeX.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
-closeX.TextColor3 = Color3.new(1, 1, 1)
-closeX.Font = Enum.Font.GothamBold
-closeX.TextScaled = true
-Instance.new("UICorner", closeX)
-
-closeX.MouseButton1Click:Connect(function()
-    selectedPet = nil
-    confirmBox.Visible = false
-    overlay.Visible = false
-end)
-
-local confirm = Instance.new("TextButton", confirmBox)
-confirm.ZIndex = 6
-confirm.Size = UDim2.new(0.45, 0, 0.5, 0)
-confirm.Position = UDim2.new(0.05, 0, 0.25, 0)
-confirm.Text = "Confirm"
-confirm.BackgroundColor3 = lightGreen
-confirm.TextColor3 = Color3.new(1, 1, 1)
-confirm.Font = Enum.Font.GothamBold
-confirm.TextScaled = true
-Instance.new("UICorner", confirm)
-
-local cancel = Instance.new("TextButton", confirmBox)
-cancel.ZIndex = 6
-cancel.Size = UDim2.new(0.45, 0, 0.5, 0)
-cancel.Position = UDim2.new(0.5, 0, 0.25, 0)
-cancel.Text = "Cancel"
-cancel.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-cancel.TextColor3 = Color3.new(1, 1, 1)
-cancel.Font = Enum.Font.GothamBold
-cancel.TextScaled = true
-Instance.new("UICorner", cancel)
-
-cancel.MouseButton1Click:Connect(function()
-    selectedPet = nil
-    confirmBox.Visible = false
-    overlay.Visible = false
-end)
-
-confirm.MouseButton1Click:Connect(function()
-    confirmBox.Visible = false
-    overlay.Visible = false
-    petListFrame.Visible = false
-    rerollBtn.Active = true
-    rerollBtn.BackgroundColor3 = lightGreen
-end)
-
--- Reroll Age Frame
-local rerollFrame = Instance.new("Frame", gui)
-rerollFrame.Size = UDim2.new(0, 400, 0, 160)
-rerollFrame.Position = UDim2.new(0.32, 0, 0.45, 0)
-rerollFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
-rerollFrame.Visible = false
-Instance.new("UICorner", rerollFrame)
-
-local statusLabel = Instance.new("TextLabel", rerollFrame)
-statusLabel.Size = UDim2.new(1, 0, 0.4, 0)
-statusLabel.Position = UDim2.new(0, 0, 0, 0)
-statusLabel.Text = "Randomizing pet age please do not leave"
-statusLabel.TextColor3 = Color3.new(1,1,1)
-statusLabel.TextScaled = true
-statusLabel.Font = Enum.Font.Gotham
-statusLabel.BackgroundTransparency = 1
-
-local smallTimerHolder = Instance.new("Frame", rerollFrame)
-smallTimerHolder.Size = UDim2.new(0.3, 0, 0.25, 0)
-smallTimerHolder.Position = UDim2.new(0.35, 0, 0.5, 0)
-smallTimerHolder.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-Instance.new("UICorner", smallTimerHolder)
-
-local smallTimer = Instance.new("TextLabel", smallTimerHolder)
-smallTimer.Size = UDim2.new(1, 0, 1, 0)
-smallTimer.Text = "5:00"
-smallTimer.TextColor3 = Color3.new(1,1,1)
-smallTimer.TextScaled = true
-smallTimer.Font = Enum.Font.GothamBold
-smallTimer.BackgroundTransparency = 1
-
--- Pet button click
-petBtn.MouseButton1Click:Connect(function()
+-- === Pet Button Logic ===
+petSelect.MouseButton1Click:Connect(function()
     petListFrame.Visible = true
 end)
 
--- Reroll button click
-rerollBtn.MouseButton1Click:Connect(function()
-    if not rerollBtn.Active then return end
-    mainUI.Visible = false
-    rerollFrame.Visible = true
-
-    local totalTime = 300
-    for i = totalTime, 0, -1 do
-        local min = math.floor(i / 60)
-        local sec = i % 60
-        smallTimer.Text = string.format("%d:%02d", min, sec)
-        task.wait(1)
-    end
-
-    statusLabel.Text = [[Pet Age changed into <i>65age 10.3kg</i>
-Please Rejoin]]
-    statusLabel.RichText = true
+-- === Start Button Behavior ===
+welcomeBtn.MouseButton1Click:Connect(function()
+    welcomeFrame.Visible = false
+    loadingHolder.Visible = true
+    TweenService:Create(loadProgress, TweenInfo.new(20, Enum.EasingStyle.Linear), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+    task.delay(20, function()
+        loadingHolder.Visible = false
+        rootUI.Visible = true
+    end)
 end)
 
--- Start Button Click Logic
-startButton.MouseButton1Click:Connect(function()
-    startFrame.Visible = false
-    loadingFrame.Visible = true
+-- === Age Up Frame ===
+local rollFrame = Instance.new("Frame", gui)
+rollFrame.Size = UDim2.new(0, 360, 0, 140)
+rollFrame.Position = UDim2.new(0.5, -180, 0.5, -70)
+rollFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+rollFrame.Visible = false
+Instance.new("UICorner", rollFrame)
 
-    TweenService:Create(
-        loadingBar,
-        TweenInfo.new(20, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut),
-        {Size = UDim2.new(1, 0, 1, 0)}
-    ):Play()
+local rollText = Instance.new("TextLabel", rollFrame)
+rollText.Size = UDim2.new(1, 0, 0.6, 0)
+rollText.Position = UDim2.new(0, 0, 0, 0)
+rollText.Text = "Randomizing pet age please do not leave"
+rollText.TextColor3 = textWhite
+rollText.Font = Enum.Font.Gotham
+rollText.TextScaled = true
+rollText.BackgroundTransparency = 1
 
-    task.delay(20, function()
-        loadingFrame.Visible = false
-        mainUI.Visible = true
-    end)
+local timerBox = Instance.new("Frame", rollFrame)
+timerBox.Size = UDim2.new(0.3, 0, 0.25, 0)
+timerBox.Position = UDim2.new(0.35, 0, 0.6, 0)
+timerBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+Instance.new("UICorner", timerBox)
+
+local timerLabel = Instance.new("TextLabel", timerBox)
+timerLabel.Size = UDim2.new(1, 0, 1, 0)
+timerLabel.Text = "5:00"
+timerLabel.TextColor3 = textWhite
+timerLabel.TextScaled = true
+timerLabel.Font = Enum.Font.GothamBold
+timerLabel.BackgroundTransparency = 1
+
+-- === Age Up Behavior ===
+ageBtn.MouseButton1Click:Connect(function()
+    if not ageBtn.Active then return end
+    rootUI.Visible = false
+    rollFrame.Visible = true
+    for i = 300, 0, -1 do
+        local m = math.floor(i / 60)
+        local s = i % 60
+        timerLabel.Text = string.format("%d:%02d", m, s)
+        task.wait(1)
+    end
+    rollText.Text = "Pet Age changed into <i>65age 10.3kg</i>\nPlease Rejoin"
+    rollText.RichText = true
 end)
