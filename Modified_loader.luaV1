@@ -1,4 +1,4 @@
--- Roblox Pet Age Randomizer: Reimagined from Scratch
+-- Roblox Pet Age Randomizer: Reimagined with Garden UI Elements
 
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -11,18 +11,38 @@ local function makeDraggable(frame)
     frame.Draggable = true
 end
 
--- New Theme Colors
+-- Colors
 local baseBrown = Color3.fromRGB(100, 85, 60)
 local accentGreen = Color3.fromRGB(80, 200, 120)
 local textWhite = Color3.new(1, 1, 1)
-local alertRed = Color3.fromRGB(255, 60, 60)
 
 -- GUI Container
 local gui = Instance.new("ScreenGui", playerGui)
-gui.Name = "PetAgeReimaginedUI"
+gui.Name = "PetAgeGardenUI"
 gui.ResetOnSpawn = false
 
--- === Welcome Window ===
+-- Background Image
+local background = Instance.new("ImageLabel", gui)
+background.Size = UDim2.new(1, 0, 1, 0)
+background.Position = UDim2.new(0, 0, 0, 0)
+background.Image = "rbxassetid://13886771787" -- Wooden background
+background.ImageTransparency = 0.1
+background.BackgroundTransparency = 1
+background.ZIndex = 0
+
+-- Title Banner
+local titleBar = Instance.new("TextLabel", gui)
+titleBar.Size = UDim2.new(0, 300, 0, 40)
+titleBar.Position = UDim2.new(0.5, -150, 0.05, 0)
+titleBar.BackgroundColor3 = baseBrown
+titleBar.Text = "<b>Pet Age Randomizer</b>"
+titleBar.RichText = true
+titleBar.TextColor3 = textWhite
+titleBar.Font = Enum.Font.FredokaOne
+titleBar.TextScaled = true
+Instance.new("UICorner", titleBar)
+
+-- Welcome Screen
 local welcomeFrame = Instance.new("Frame", gui)
 welcomeFrame.Size = UDim2.new(0, 240, 0, 120)
 welcomeFrame.Position = UDim2.new(0.5, -120, 0.5, -60)
@@ -40,7 +60,7 @@ welcomeBtn.Font = Enum.Font.FredokaOne
 welcomeBtn.TextScaled = true
 Instance.new("UICorner", welcomeBtn)
 
--- === Entry Progress Bar ===
+-- Loading Progress Bar
 local loadingHolder = Instance.new("Frame", gui)
 loadingHolder.Size = UDim2.new(0, 280, 0, 25)
 loadingHolder.Position = UDim2.new(0.5, -140, 0.5, -12)
@@ -53,7 +73,7 @@ loadProgress.Size = UDim2.new(0, 0, 1, 0)
 loadProgress.BackgroundColor3 = accentGreen
 Instance.new("UICorner", loadProgress)
 
--- === Main Interface ===
+-- Main UI
 local rootUI = Instance.new("Frame", gui)
 rootUI.Size = UDim2.new(0, 320, 0, 180)
 rootUI.Position = UDim2.new(0.5, -160, 0.5, -90)
@@ -84,6 +104,7 @@ ageBtn.AutoButtonColor = false
 ageBtn.Active = false
 Instance.new("UICorner", ageBtn)
 
+-- Footer Label
 local footerText = Instance.new("TextLabel", rootUI)
 footerText.Size = UDim2.new(1, 0, 0.2, 0)
 footerText.Position = UDim2.new(0, 0, 0.65, 0)
@@ -94,14 +115,14 @@ footerText.TextColor3 = textWhite
 footerText.Font = Enum.Font.Gotham
 footerText.TextScaled = true
 
--- === Pet List UI ===
+-- Pet List
 local petListFrame = Instance.new("ScrollingFrame", gui)
-petListFrame.Size = UDim2.new(0, 180, 0, 200)
-petListFrame.Position = UDim2.new(0.65, 0, 0.4, 0)
+petListFrame.Size = UDim2.new(0, 200, 0, 250)
+petListFrame.Position = UDim2.new(0.5, 170, 0.5, -90)
 petListFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 petListFrame.Visible = false
+petListFrame.CanvasSize = UDim2.new(0, 0, 0, 400)
 petListFrame.ScrollBarThickness = 6
-petListFrame.CanvasSize = UDim2.new(0, 0, 0, 300)
 Instance.new("UICorner", petListFrame)
 
 local pets = {
@@ -118,83 +139,51 @@ local pets = {
 local selectedPet = nil
 
 for i, pet in ipairs(pets) do
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, 0, 0, 30)
-    btn.Position = UDim2.new(0, 0, 0, (i - 1) * 35)
-    btn.Text = pet.Name
+    local btn = Instance.new("TextButton", petListFrame)
+    btn.Size = UDim2.new(0.9, 0, 0, 35)
+    btn.Position = UDim2.new(0.05, 0, 0, (i - 1) * 40)
     btn.BackgroundColor3 = pet.Color
+    btn.Text = "🌿 " .. pet.Name
     btn.TextColor3 = Color3.new(1, 1, 1)
-    btn.Font = Enum.Font.Gotham
+    btn.Font = Enum.Font.FredokaOne
     btn.TextScaled = true
+    local stroke = Instance.new("UIStroke", btn)
+    stroke.Color = Color3.new(1, 1, 1)
+    stroke.Thickness = 1.2
+    stroke.Transparency = 0.3
     Instance.new("UICorner", btn)
-    btn.Parent = petListFrame
 
     btn.MouseButton1Click:Connect(function()
         selectedPet = pet.Name
+        petListFrame.Visible = false
         ageBtn.Active = true
         ageBtn.BackgroundColor3 = accentGreen
-        petListFrame.Visible = false
     end)
 end
 
--- === Pet Button Logic ===
 petSelect.MouseButton1Click:Connect(function()
     petListFrame.Visible = true
 end)
 
--- === Start Button Behavior ===
+ageBtn.MouseButton1Click:Connect(function()
+    rootUI.Visible = false
+    local msg = Instance.new("TextLabel", gui)
+    msg.Size = UDim2.new(0, 300, 0, 80)
+    msg.Position = UDim2.new(0.5, -150, 0.5, -40)
+    msg.BackgroundColor3 = Color3.fromRGB(30,30,30)
+    msg.Text = "Please Rejoin"
+    msg.TextColor3 = textWhite
+    msg.Font = Enum.Font.FredokaOne
+    msg.TextScaled = true
+    Instance.new("UICorner", msg)
+end)
+
 welcomeBtn.MouseButton1Click:Connect(function()
     welcomeFrame.Visible = false
     loadingHolder.Visible = true
-    TweenService:Create(loadProgress, TweenInfo.new(20, Enum.EasingStyle.Linear), {Size = UDim2.new(1, 0, 1, 0)}):Play()
-    task.delay(20, function()
+    TweenService:Create(loadProgress, TweenInfo.new(4), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+    task.delay(4, function()
         loadingHolder.Visible = false
         rootUI.Visible = true
     end)
-end)
-
--- === Age Up Frame ===
-local rollFrame = Instance.new("Frame", gui)
-rollFrame.Size = UDim2.new(0, 360, 0, 140)
-rollFrame.Position = UDim2.new(0.5, -180, 0.5, -70)
-rollFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-rollFrame.Visible = false
-Instance.new("UICorner", rollFrame)
-
-local rollText = Instance.new("TextLabel", rollFrame)
-rollText.Size = UDim2.new(1, 0, 0.6, 0)
-rollText.Position = UDim2.new(0, 0, 0, 0)
-rollText.Text = "Randomizing pet age please do not leave"
-rollText.TextColor3 = textWhite
-rollText.Font = Enum.Font.Gotham
-rollText.TextScaled = true
-rollText.BackgroundTransparency = 1
-
-local timerBox = Instance.new("Frame", rollFrame)
-timerBox.Size = UDim2.new(0.3, 0, 0.25, 0)
-timerBox.Position = UDim2.new(0.35, 0, 0.6, 0)
-timerBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-Instance.new("UICorner", timerBox)
-
-local timerLabel = Instance.new("TextLabel", timerBox)
-timerLabel.Size = UDim2.new(1, 0, 1, 0)
-timerLabel.Text = "5:00"
-timerLabel.TextColor3 = textWhite
-timerLabel.TextScaled = true
-timerLabel.Font = Enum.Font.GothamBold
-timerLabel.BackgroundTransparency = 1
-
--- === Age Up Behavior ===
-ageBtn.MouseButton1Click:Connect(function()
-    if not ageBtn.Active then return end
-    rootUI.Visible = false
-    rollFrame.Visible = true
-    for i = 300, 0, -1 do
-        local m = math.floor(i / 60)
-        local s = i % 60
-        timerLabel.Text = string.format("%d:%02d", m, s)
-        task.wait(1)
-    end
-    rollText.Text = "Pet Age changed into <i>65age 10.3kg</i>\nPlease Rejoin"
-    rollText.RichText = true
 end)
