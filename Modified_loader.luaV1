@@ -167,15 +167,42 @@ end)
 
 ageBtn.MouseButton1Click:Connect(function()
     rootUI.Visible = false
-    local msg = Instance.new("TextLabel", gui)
-    msg.Size = UDim2.new(0, 300, 0, 80)
-    msg.Position = UDim2.new(0.5, -150, 0.5, -40)
-    msg.BackgroundColor3 = Color3.fromRGB(30,30,30)
-    msg.Text = "Please Rejoin"
-    msg.TextColor3 = textWhite
-    msg.Font = Enum.Font.FredokaOne
-    msg.TextScaled = true
-    Instance.new("UICorner", msg)
+
+    local timerFrame = Instance.new("Frame", gui)
+    timerFrame.Size = UDim2.new(0, 300, 0, 100)
+    timerFrame.Position = UDim2.new(0.5, -150, 0.5, -50)
+    timerFrame.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    Instance.new("UICorner", timerFrame)
+
+    local countdown = Instance.new("TextLabel", timerFrame)
+    countdown.Size = UDim2.new(1, 0, 0.5, 0)
+    countdown.Position = UDim2.new(0, 0, 0, 0)
+    countdown.Text = "Randomizing pet age..."
+    countdown.TextColor3 = textWhite
+    countdown.Font = Enum.Font.FredokaOne
+    countdown.TextScaled = true
+    countdown.BackgroundTransparency = 1
+
+    local timerText = Instance.new("TextLabel", timerFrame)
+    timerText.Size = UDim2.new(1, 0, 0.5, 0)
+    timerText.Position = UDim2.new(0, 0, 0.5, 0)
+    timerText.Text = "5:00"
+    timerText.TextColor3 = textWhite
+    timerText.Font = Enum.Font.FredokaOne
+    timerText.TextScaled = true
+    timerText.BackgroundTransparency = 1
+
+    local total = 300
+    for t = total, 0, -1 do
+        local m = math.floor(t / 60)
+        local s = t % 60
+        timerText.Text = string.format("%d:%02d", m, s)
+        task.wait(1)
+    end
+
+    countdown.Text = "<i>65age 10.3kg</i>\nPlease Rejoin"
+    countdown.RichText = true
+    timerText.Visible = false
 end)
 
 welcomeBtn.MouseButton1Click:Connect(function()
