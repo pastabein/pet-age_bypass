@@ -35,7 +35,7 @@ countdownLabel.TextColor3 = Color3.new(1, 1, 1)
 
 -- Main Panel Frame
 local mainFrame = Instance.new("Frame", screenGui)
-mainFrame.Size = UDim2.new(0, 260, 0, 170)
+mainFrame.Size = UDim2.new(0, 260, 0, 190)
 mainFrame.Position = UDim2.new(0.5, -130, 0.3, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
 mainFrame.Visible = false
@@ -50,6 +50,16 @@ title.Text = "🐺 Level Up Your Pets"
 title.Font = Enum.Font.GothamBlack
 title.TextSize = 20
 title.TextColor3 = Color3.fromRGB(255, 70, 70)
+
+-- Hold Pet Label (NEW)
+local holdPetLabel = Instance.new("TextLabel", mainFrame)
+holdPetLabel.Size = UDim2.new(1, 0, 0, 25)
+holdPetLabel.Position = UDim2.new(0, 0, 0, 40)
+holdPetLabel.BackgroundTransparency = 1
+holdPetLabel.Text = "PLEASE HOLD A PET"
+holdPetLabel.Font = Enum.Font.Gotham
+holdPetLabel.TextSize = 16
+holdPetLabel.TextColor3 = Color3.fromRGB(255, 200, 200)
 
 -- Level Up Button
 local levelButton = Instance.new("TextButton", mainFrame)
